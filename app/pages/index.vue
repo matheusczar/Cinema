@@ -7,9 +7,14 @@
 
       <nav>
         <a href="#">Início</a>
-        <a href="#">Filmes</a>
-        <a href="#">Trailers</a>
+        <NuxtLink to="/filmes">Filmes</NuxtLink>
+    
         <a href="#">Contato</a>
+
+        <!--adicionado botao-->
+        <NuxtLink to="/login" class="login-btn">
+          Entrar
+        </NuxtLink>
       </nav>
     </header>
 
@@ -36,7 +41,7 @@
 
         <div class="movie-card">
           <img
-            src=""
+            src="https://ingresso-a.akamaihd.net/prd/img/movie/michael/a10e5eb8-6bef-4612-9288-5eae9dfe0377.webp"
             alt="Filme"
           />
 
@@ -46,17 +51,17 @@
 
         <div class="movie-card">
           <img
-            src=""
+            src="https://ingresso-a.akamaihd.net/prd/img/movie/o-diabo-veste-prada-2/4e042f1b-0072-4560-96f9-409c59dd0da2.webp"
             alt="Filme"
           />
 
-          <h3>O Diabo Veste Prada</h3>
+          <h3>O Diabo Veste Prada 2</h3>
           <p>Comedia</p>
         </div>
 
         <div class="movie-card">
           <img
-            src=""
+            src="https://ingresso-a.akamaihd.net/prd/img/movie/mortal-kombat-2/5e25856e-33f3-401b-8655-d8c016ffad1d.webp"
             alt="Filme"
           />
 
@@ -105,9 +110,24 @@ nav a {
   margin-left: 20px;
   transition: 0.3s;
 }
-
+/* BOTAO */
 nav a:hover {
   color: #e50914;
+}
+
+.login-btn {
+  margin-left: 20px;
+  padding: 10px 18px;
+  background-color: #e50914;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #b20710;
 }
 
 /* BANNER */
@@ -175,19 +195,16 @@ nav a:hover {
 
 .movie-grid {
   display: grid;
-
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
 }
 
 .movie-card {
   background-color: #1b1b1b;
   border-radius: 10px;
-
   overflow: hidden;
-
   transition: 0.3s;
+  width: 350px;
 }
 
 .movie-card:hover {
@@ -196,7 +213,7 @@ nav a:hover {
 
 .movie-card img {
   width: 100%;
-  height: 320px;
+  height: 420px;
   object-fit: cover;
 }
 
