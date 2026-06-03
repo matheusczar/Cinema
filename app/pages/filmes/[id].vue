@@ -52,6 +52,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+const user = useSupabaseUser()
 
 const filme = filmes.find(f => f.id === route.params.id)
 
@@ -65,6 +66,13 @@ function comprarIngresso() {
     return
   }
   aviso.value = ''
+
+  const user = useSupabaseUser()
+  if (!user.value) {
+    router.push(`/login?redirect=/compra?filme=${filme.titulo}&sessao=Hoje — ${horarioSelecionado.value}`)
+    return
+  }
+
   router.push(`/compra?filme=${filme.titulo}&sessao=Hoje — ${horarioSelecionado.value}`)
 }
 </script>

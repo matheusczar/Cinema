@@ -2,14 +2,11 @@
   Página: cadastro.vue
   Criado por: Enzo Yuri
   Descrição: Página de cadastro do sistema CineMax.
-  Permite que o usuário crie uma conta com nome, e-mail e senha.
-  Possui validação de senha, barra de força e confirmação de senha.
-  Utiliza o componente reutilizável FormularioLogin.
+  Integrado com Supabase para criar usuários reais.
 -->
 
 <template>
   <div>
-    <!-- Navbar fixa no topo -->
     <header class="navbar">
       <NuxtLink to="/" class="logo">🎥 CineMax</NuxtLink>
       <nav>
@@ -20,27 +17,23 @@
       </nav>
     </header>
 
-    <!-- Componente de formulário reutilizável com imagem e textos próprios do cadastro -->
     <FormularioLogin
       titulo="Crie sua conta"
-      subtitulo="Faça parte do CineClub 🎬 — acesso antecipado a pré-estreias, descontos exclusivos e a melhor experiência do cinema. É grátis!"
+      subtitulo="Cadastre-se gratuitamente e aproveite a melhor experiência do cinema."
       bgImage="url('https://images.unsplash.com/photo-1478720568477-152d9b164e26')"
     >
       <form @submit.prevent="handleCadastro">
 
-        <!-- Campo de nome -->
         <div class="campo">
           <label>Nome completo</label>
           <input v-model="nome" type="text" placeholder="Seu nome" required />
         </div>
 
-        <!-- Campo de e-mail -->
         <div class="campo">
           <label>E-mail</label>
           <input v-model="email" type="email" placeholder="seu@email.com" required />
         </div>
 
-        <!-- Campo de senha com barra de força -->
         <div class="campo">
           <label>Senha</label>
           <div class="input-senha">
@@ -49,7 +42,6 @@
               {{ mostrarSenha ? '🙈' : '👁️' }}
             </button>
           </div>
-          <!-- Barra de força da senha -->
           <div v-if="senha.length > 0" class="forca-senha">
             <div class="barra-forca">
               <div class="barra-preenchida" :style="{ width: forcaSenhaPercent + '%' }" :class="forcaSenhaClasse"></div>
@@ -58,7 +50,6 @@
           </div>
         </div>
 
-        <!-- Campo de confirmação de senha -->
         <div class="campo">
           <label>Confirmar senha</label>
           <div class="input-senha">
@@ -67,31 +58,26 @@
               {{ mostrarConfirmar ? '🙈' : '👁️' }}
             </button>
           </div>
-          <!-- Aviso se as senhas não coincidem -->
           <span v-if="confirmarSenha && senha !== confirmarSenha" class="aviso-senha">
             As senhas não coincidem
           </span>
         </div>
 
-        <!-- Aceite dos termos de uso -->
         <div class="termos">
           <input type="checkbox" v-model="aceitouTermos" required />
           <span>Eu aceito os <span class="link-destaque">Termos de Uso</span> e a <span class="link-destaque">Política de Privacidade</span></span>
         </div>
 
-        <!-- Botão de envio -->
         <button type="submit" class="btn-principal" :disabled="carregando || senha !== confirmarSenha">
           <span v-if="carregando">Cadastrando...</span>
           <span v-else>Criar conta</span>
         </button>
 
-        <!-- Mensagens de erro e sucesso -->
         <div v-if="erro" class="mensagem-erro">{{ erro }}</div>
         <div v-if="sucesso" class="mensagem-sucesso">{{ sucesso }}</div>
 
       </form>
 
-      <!-- Rodapé com link para login -->
       <template #footer>
         <p class="texto-footer">
           Já tem uma conta?
@@ -105,10 +91,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-// Adicione esta linha para conectar com o Supabase
+// Supabase e router
 const supabase = useSupabaseClient()
+const router = useRouter()
 
-// Variáveis reativas do formulário (mantidas as do Enzo)
 const nome = ref('')
 const email = ref('')
 const senha = ref('')
@@ -120,7 +106,6 @@ const carregando = ref(false)
 const erro = ref('')
 const sucesso = ref('')
 
-// Funções de cálculo de força da senha (MANTIDAS EXATAMENTE IGUAIS)
 const forcaSenhaPercent = computed(() => {
   const s = senha.value
   if (s.length === 0) return 0
@@ -145,39 +130,45 @@ const forcaSenhaTexto = computed(() => {
   return map[forcaSenhaClasse.value]
 })
 
-// ESTA É A FUNÇÃO QUE FOI ALTERADA PARA O SUPABASE
+// Cadastro integrado com Supabase
 async function handleCadastro() {
   erro.value = ''
   sucesso.value = ''
-  
+
   if (senha.value !== confirmarSenha.value) {
     erro.value = 'As senhas não coincidem.'
     return
   }
-  
+  if (senha.value.length < 6) {
+    erro.value = 'A senha deve ter pelo menos 6 caracteres.'
+    return
+  }
+
   carregando.value = true
-  
+
   try {
     const { error } = await supabase.auth.signUp({
       email: email.value,
       password: senha.value,
       options: {
         data: {
-          full_name: nome.value,
+          nome: nome.value
         }
       }
     })
 
     if (error) throw error
-    sucesso.value = 'Conta criada com sucesso! Verifique seu e-mail. ✅'
+
+    sucesso.value = 'Conta criada com sucesso! ✅ Redirecionando para o login...'
+    setTimeout(() => router.push('/login'), 2000)
+
   } catch (e) {
-    erro.value = 'Erro ao cadastrar: ' + e.message
+    erro.value = e.message || 'Erro ao criar conta. Tente novamente.'
   } finally {
     carregando.value = false
   }
 }
 </script>
-
 
 <style scoped>
 .navbar {
