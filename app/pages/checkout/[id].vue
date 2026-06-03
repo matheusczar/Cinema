@@ -107,13 +107,19 @@
 <script setup>
 import { ref, computed, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { filmes } from '~/data/filmes'
 
 const route = useRoute()
 const router = useRouter()
 const supabase = useSupabaseClient() // Conecta com o Supabase
 
-const filme = filmes.find(f => f.id === route.params.id)
+const { data: filme, error } = await supabase
+  .from('filmes')
+  .select('*')
+  .eq('id', route.params.id)
+  .single()
+
+console.log('Filme:', filme)
+console.log('Erro:', error)
 const selectedSeats = ref([])
 const loading = ref(false)
 
@@ -123,10 +129,32 @@ const session = reactive({
   date: '',
   time: ''
 })
+const hoje = new Date().toISOString().split('T')[0]
 
+const fimDoAno = `${new Date().getFullYear()}-12-31`
+
+const isSessionComplete = computed(() => {
+  return (
+    session.city &&
+    session.cinema &&
+    session.date &&
+    session.time
+  )
+})
+
+const totalValue = computed(() => {
+  return selectedSeats.value.length * 30
+})
+
+const canFinish = computed(() => {
+  return (
+    isSessionComplete.value &&
+    selectedSeats.value.length > 0
+  )
+})
 
 const finishPurchase = async () => {
-  loading.ref = true
+  loading.value = true
   
   try {
     const { error } = await supabase.from('compras').insert({

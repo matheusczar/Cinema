@@ -64,8 +64,10 @@ function comprarIngresso() {
     aviso.value = 'Selecione um horário antes de continuar!'
     return
   }
+
   aviso.value = ''
-  router.push(`/compra?filme=${filme.titulo}&sessao=Hoje — ${horarioSelecionado.value}`)
+
+  router.push(`/checkout/${filme.id}`)
 }
 </script>
 
