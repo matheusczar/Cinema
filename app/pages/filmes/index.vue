@@ -14,7 +14,7 @@
     </div>
 
     <div class="movie-grid">
-      <MovieCaard
+      <MovieCard
         v-for="filme in filmesFiltrados"
         :key="filme.id"
         :filme="filme"
@@ -25,14 +25,25 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { filmes } from '~/data/filmes'
 
 const searchQuery = ref('')
 
+const supabase = useSupabaseClient()
+
+const { data: filmes, error } = await supabase
+  .from('filmes')
+  .select('*')
+
+console.log('Filmes:', filmes)
+console.log('Erro:', error)
+
 const filmesFiltrados = computed(() => {
+  if (!filmes) return []
+
   if (!searchQuery.value) {
     return filmes
   }
+
   return filmes.filter(filme =>
     filme.titulo.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
     filme.genero.toLowerCase().includes(searchQuery.value.toLowerCase())

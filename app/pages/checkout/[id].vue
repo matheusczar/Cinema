@@ -111,16 +111,11 @@ import { filmes } from '~/data/filmes'
 
 const route = useRoute()
 const router = useRouter()
+const supabase = useSupabaseClient() // Conecta com o Supabase
+
 const filme = filmes.find(f => f.id === route.params.id)
 const selectedSeats = ref([])
-
-// Pega a data de hoje (ex: 2026-06-02)
-const hoje = new Date().toISOString().split('T')[0]
-
-// Define o último dia do ano atual (2026-12-31)
-const anoAtual = new Date().getFullYear()
-const fimDoAno = `${anoAtual}-12-31`
-
+const loading = ref(false)
 
 const session = reactive({
   city: '',
@@ -129,21 +124,34 @@ const session = reactive({
   time: ''
 })
 
-const isSessionComplete = computed(() => {
-  return session.city && session.cinema && session.date && session.time
-})
 
-const canFinish = computed(() => {
-  return isSessionComplete.value && selectedSeats.value.length > 0
-})
+const finishPurchase = async () => {
+  loading.ref = true
+  
+  try {
+    const { error } = await supabase.from('compras').insert({
+      filme_titulo: filme.titulo,
+      cidade: session.city,
+      cinema: session.cinema,
+      data_sessao: session.date,
+      horario: session.time,
+      assentos: selectedSeats.value,
+      valor_total: totalValue.value
+    })
 
-const totalValue = computed(() => selectedSeats.value.length * 30.00)
+    if (error) throw error
 
-const finishPurchase = () => {
-  alert(`Compra confirmada!\nFilme: ${filme.titulo}\nLocal: ${session.city}\nData: ${session.date} às ${session.time}\nAssentos: ${selectedSeats.value.join(', ')}`)
-  router.push('/')
+    alert('✅ Compra salva no Supabase com sucesso!')
+    router.push('/')
+  } catch (e) {
+    console.error(e)
+    alert('❌ Erro ao salvar no banco: ' + e.message)
+  } finally {
+    loading.value = false
+  }
 }
 </script>
+
 
 <style scoped>
 /* O estilo permanece o mesmo do anterior, com adições para os passos */

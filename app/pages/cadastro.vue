@@ -105,7 +105,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-// Variáveis reativas do formulário
+// Adicione esta linha para conectar com o Supabase
+const supabase = useSupabaseClient()
+
+// Variáveis reativas do formulário (mantidas as do Enzo)
 const nome = ref('')
 const email = ref('')
 const senha = ref('')
@@ -117,7 +120,7 @@ const carregando = ref(false)
 const erro = ref('')
 const sucesso = ref('')
 
-// Calcula a força da senha em porcentagem
+// Funções de cálculo de força da senha (MANTIDAS EXATAMENTE IGUAIS)
 const forcaSenhaPercent = computed(() => {
   const s = senha.value
   if (s.length === 0) return 0
@@ -129,7 +132,6 @@ const forcaSenhaPercent = computed(() => {
   return pontos
 })
 
-// Define a classe visual da barra de força
 const forcaSenhaClasse = computed(() => {
   const p = forcaSenhaPercent.value
   if (p <= 25) return 'fraca'
@@ -138,30 +140,44 @@ const forcaSenhaClasse = computed(() => {
   return 'forte'
 })
 
-// Texto descritivo da força da senha
 const forcaSenhaTexto = computed(() => {
   const map = { fraca: 'Fraca', media: 'Média', boa: 'Boa', forte: 'Forte' }
   return map[forcaSenhaClasse.value]
 })
 
-// Função de cadastro - futuramente conectar com API do backend
+// ESTA É A FUNÇÃO QUE FOI ALTERADA PARA O SUPABASE
 async function handleCadastro() {
   erro.value = ''
   sucesso.value = ''
+  
   if (senha.value !== confirmarSenha.value) {
     erro.value = 'As senhas não coincidem.'
     return
   }
-  if (senha.value.length < 6) {
-    erro.value = 'A senha deve ter pelo menos 6 caracteres.'
-    return
-  }
+  
   carregando.value = true
-  await new Promise(resolve => setTimeout(resolve, 1200))
-  sucesso.value = 'Conta criada com sucesso! ✅'
-  carregando.value = false
+  
+  try {
+    const { error } = await supabase.auth.signUp({
+      email: email.value,
+      password: senha.value,
+      options: {
+        data: {
+          full_name: nome.value,
+        }
+      }
+    })
+
+    if (error) throw error
+    sucesso.value = 'Conta criada com sucesso! Verifique seu e-mail. ✅'
+  } catch (e) {
+    erro.value = 'Erro ao cadastrar: ' + e.message
+  } finally {
+    carregando.value = false
+  }
 }
 </script>
+
 
 <style scoped>
 .navbar {

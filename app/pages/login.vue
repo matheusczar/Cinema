@@ -78,7 +78,11 @@
 <script setup>
 import { ref } from 'vue'
 
-// Variáveis reativas do formulário
+// Adicione estas duas linhas
+const supabase = useSupabaseClient()
+const router = useRouter()
+
+// Variáveis reativas (mantidas)
 const email = ref('')
 const senha = ref('')
 const lembrar = ref(false)
@@ -86,19 +90,29 @@ const mostrarSenha = ref(false)
 const carregando = ref(false)
 const erro = ref('')
 
-// Função de login - futuramente conectar com API do backend
+// ESTA É A FUNÇÃO QUE FOI ALTERADA PARA O SUPABASE
 async function handleLogin() {
   erro.value = ''
   carregando.value = true
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  if (email.value === 'teste@email.com' && senha.value === '123456') {
+  
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.value,
+      password: senha.value,
+    })
+
+    if (error) throw error
+
     alert('Login realizado com sucesso! ✅')
-  } else {
-    erro.value = 'E-mail ou senha incorretos. Tente novamente.'
+    router.push('/') // Redireciona para a Home
+  } catch (e) {
+    erro.value = 'E-mail ou senha incorretos.'
+  } finally {
+    carregando.value = false
   }
-  carregando.value = false
 }
 </script>
+
 
 <style scoped>
 .navbar {

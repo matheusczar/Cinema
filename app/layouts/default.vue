@@ -1,4 +1,5 @@
 <template>
+  <!--layout padrão-->
   <div class="app-container">
     <Navbar />
     <main class="main-content">

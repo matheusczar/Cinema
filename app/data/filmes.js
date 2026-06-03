@@ -36,7 +36,7 @@ export const filmes = [
     duracao: "1h 55min",
     classificacao: "14 anos",
     imagem: "https://ingresso-a.akamaihd.net/prd/img/movie/golpe-explosivo/0ba52fca-86d0-4348-ad42-ae5d12d3c6f3.webp",
-    sinopse: "Um grupo de especialistas planeja um assalto de alto risco."
+    sinopse: "Um grupo de assaltantes ousados decide aproveitar o caos gerado pela descoberta de uma bomba não detonada da Segunda Guerra Mundial para realizar um roubo sem precedentes."
   },
 
   {
@@ -97,5 +97,25 @@ export const filmes = [
     classificacao: "14 anos",
     imagem: "https://ingresso-a.akamaihd.net/prd/img/movie/toy-story-5/2a9f7d1e-400c-4caa-b989-c1fb513dd416.webp",
     sinopse: "Buzz, Woody, Jessie e os demais brinquedos tradicionais são desafiados pela nova obsessão das crianças do século XXI: os dispositivos eletrônicos."
+  },
+
+  {
+    id: "Todo Mundo Em Pânico",
+    titulo: "Todo Mundo Em Pânico (2026)",
+    genero: "Comédia",
+    duracao: "1h 36min",
+    classificacao: "18",
+    imagem: "https://ingresso-a.akamaihd.net/prd/img/movie/todo-mundo-em-panico-2026/7024927a-0c75-426f-95ae-d96dca0f400c.webp",
+    sinopse: "Mais de 25 anos depois de escaparem de um assassino mascarado muito familiar, o quarteto formado por Shorty, Ray, Cindy e Brenda está novamente na mira do criminoso e nenhuma franquia de terror está a salvo."
+  },
+
+  {
+    id: "mandaloriano-grogu",
+    titulo: "O Mandaloriano e Grogu",
+    genero: "Aventura",
+    duracao: "2h 13min",
+    classificacao: "14",
+    imagem: "https://ingresso-a.akamaihd.net/prd/img/movie/o-mandaloriano-e-grogu/d81c6f3c-c53b-4249-9028-479e1e55b8a2.webp",
+    sinopse: "Outrara um caçador de recompensas solitário, o Mandaloriano Din Djarin e seu aprendiz Grogu embarcam em uma nova e emocionante aventura de Guerra nas Estrelas."
   }
 ]
