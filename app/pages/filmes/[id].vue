@@ -11,45 +11,34 @@
         <h1>{{ filme.titulo }}</h1>
 
         <p class="genero">
-          🎭 {{ filme.genero }}
+           {{ filme.genero }}
         </p>
 
         <p>
-          📅 Estreia: 2026
+           Estreia: 2026
         </p>
 
         <p>
-          ⏱️ Duração: {{ filme.duracao }}
+           Duração: {{ filme.duracao }}
         </p>
 
         <p>
-          🔞 Classificação: {{ filme.classificacao }}
+           Classificação: {{ filme.classificacao }}
         </p>
 
-        <button class="btn-ingresso">
-          Comprar Ingresso
-        </button>
+        <!-- ATUALIZADO: LINK PARA CHECKOUT -->
+        <NuxtLink :to="`/checkout/${filme.id}`">
+          <button class="btn-ingresso">
+            Comprar Ingresso
+          </button>
+        </NuxtLink>
       </div>
     </div>
 
     <div class="sinopse">
       <h2>Sinopse</h2>
-
-      <p>
-        {{ filme.sinopse }}
-      </p>
-    </div>
-
-    <div class="sessoes">
-      <h2>Horários Disponíveis</h2>
-
-      <div class="horarios">
-        <button>14:00</button>
-        <button>16:30</button>
-        <button>19:00</button>
-        <button>21:30</button>
-      </div>
-    </div>
+      <p>{{ filme.sinopse }}</p>
+    </div>   
   </div>
 
   <div v-else class="erro">
@@ -65,10 +54,7 @@ import { filmes } from '~/data/filmes'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-
-const filme = filmes.find(
-  f => f.id === route.params.id
-)
+const filme = filmes.find(f => f.id === route.params.id)
 </script>
 
 <style scoped>
@@ -171,10 +157,5 @@ const filme = filmes.find(
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-.erro button:hover {
-  background: #b20710;
 }
 </style>
