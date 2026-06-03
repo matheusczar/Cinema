@@ -67,9 +67,8 @@ function comprarIngresso() {
   }
   aviso.value = ''
 
-  const user = useSupabaseUser()
   if (!user.value) {
-    router.push(`/login?redirect=/compra?filme=${filme.titulo}&sessao=Hoje — ${horarioSelecionado.value}`)
+    router.push('/login')
     return
   }
 
