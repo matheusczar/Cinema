@@ -9,7 +9,6 @@
         <p>⏱️ Duração: {{ filme.duracao }}</p>
         <p>🔞 Classificação: {{ filme.classificacao }}</p>
 
-        <!-- Escolha o horário antes de comprar -->
         <div class="sessoes">
           <h3>Horários Disponíveis</h3>
           <div class="horarios">

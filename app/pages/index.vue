@@ -5,7 +5,7 @@
     <section class="movies">
       <h2>Filmes em Alta</h2>
       <div class="movie-grid">
-        <MovieCaard
+        <MovieCard
           v-for="filme in filmes"
           :key="filme.id"
           :filme="filme"
