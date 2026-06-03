@@ -23,7 +23,7 @@
     <!-- Componente de formulário reutilizável com imagem e textos próprios do cadastro -->
     <FormularioLogin
       titulo="Crie sua conta"
-      subtitulo="Cadastre-se gratuitamente e aproveite a melhor experiência do cinema."
+      subtitulo="Faça parte do CineClub 🎬 — acesso antecipado a pré-estreias, descontos exclusivos e a melhor experiência do cinema. É grátis!"
       bgImage="url('https://images.unsplash.com/photo-1478720568477-152d9b164e26')"
     >
       <form @submit.prevent="handleCadastro">

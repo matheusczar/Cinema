@@ -14,7 +14,7 @@
     </div>
 
     <div class="movie-grid">
-      <MovieCard
+      <MovieCaard
         v-for="filme in filmesFiltrados"
         :key="filme.id"
         :filme="filme"
@@ -26,7 +26,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { filmes } from '~/data/filmes'
-/*import MovieCard from '~/components/MovieCard.vue'*/
 
 const searchQuery = ref('')
 
@@ -34,7 +33,6 @@ const filmesFiltrados = computed(() => {
   if (!searchQuery.value) {
     return filmes
   }
-
   return filmes.filter(filme =>
     filme.titulo.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
     filme.genero.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -47,34 +45,27 @@ const filmesFiltrados = computed(() => {
   min-height: 100vh;
   background: #111;
   color: white;
-
   max-width: 1600px;
   margin: 0 auto;
   padding: 20px;
-
   overflow-x: hidden;
 }
-
 .hero {
   text-align: center;
   margin-bottom: 50px;
 }
-
 .hero h1 {
   font-size: 42px;
 }
-
 .hero p {
   margin-top: 10px;
   color: #ccc;
 }
-
 .filtros {
   display: flex;
   justify-content: center;
   margin-bottom: 40px;
 }
-
 .filtros input {
   width: 400px;
   max-width: 90%;
@@ -82,7 +73,6 @@ const filmesFiltrados = computed(() => {
   border: none;
   border-radius: 8px;
 }
-
 .movie-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
